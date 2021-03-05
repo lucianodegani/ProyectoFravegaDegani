@@ -18,8 +18,8 @@ class testBase
 	@Before
 	public void abrirDriver()
 	    {
-	        driver = getDriver("Firefox");
-	        
+	       // driver = getDriver("Firefox");
+	        driver = getDriver("google");
 	        
 	        driver.manage().window().maximize();
 	    }

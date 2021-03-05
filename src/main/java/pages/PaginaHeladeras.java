@@ -3,7 +3,7 @@ package pages;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
-
+import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -54,53 +54,40 @@ public class PaginaHeladeras extends PaginaPrincipal
 	
 	public void clickLinkHeladeras(WebDriver driver)
 	{
-		try {
-			Thread.sleep(3000);
-			filtroLblHeladera=driver.findElement(By.xpath("//h4[contains(.,'Heladeras (')]"));
-			this.filtroLblHeladera.click();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
+		
+		filtroLblHeladera=driver.findElement(By.xpath("//h4[contains(.,'Heladeras (')]"));
+		this.filtroLblHeladera.click();
 		
 	}
 	
 	public void clickPrimerMarca (WebDriver driver)
 	{
-		try 
-		{
-			Thread.sleep(2000);
-			
-			//Presiono el link del filtro de las heladeras
-			//this.filtroLblHeladera.click();
-			
-			JavascriptExecutor jsx = (JavascriptExecutor)driver;
-			jsx.executeScript("window.scrollBy(0, 350)", "");
-			
-			Thread.sleep(2000);
-	
-			
-			this.nameMarca = funciones.getMarca(this.marcas.get(0).getText());
-			this.marcas.get(0).click();
-			
-			Thread.sleep(1000);
-			
-			char [] c = this.totalResult.getText().toCharArray();
-			String n = "";
-			for (int i = 0; i<c.length;i++)
-			{
-				if (Character.isDigit(c[i]))
-				{
-					n+=c[i];
-				}
-			}
-			
-			this.valTotalElementosFiltro = Integer.parseInt(n);
+		driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
 		
+		//Presiono el link del filtro de las heladeras
+					
+		JavascriptExecutor jsx = (JavascriptExecutor)driver;
+		jsx.executeScript("window.scrollBy(0, 350)", "");
+		
+		
+		driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+		
+		this.nameMarca = funciones.getMarca(this.marcas.get(0).getText());
+		this.marcas.get(0).click();
+		
+		driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+		char [] c = this.totalResult.getText().toCharArray();
+		String n = "";
+		for (int i = 0; i<c.length;i++)
+		{
+			if (Character.isDigit(c[i]))
+			{
+				n+=c[i];
+			}
 		}
-
-		catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		
+		this.valTotalElementosFiltro = Integer.parseInt(n);
 	}
 	
 	public void clickNexPage ()
@@ -119,17 +106,20 @@ public class PaginaHeladeras extends PaginaPrincipal
 				{
 					//True - entonces sumo uno a los valores positivos
 					this.contValoresSi++;
-					System.out.println(contValoresSi);
+					System.out.println("Nro de heladera de la grilla:"+contValoresSi);
+					System.out.println(valGrilla.getText());
+					
+					
 				}
 			}
 		try 
 		{
 			boolean finalLista = true;
 			while (this.btnNextPage.isEnabled() && finalLista)
-			//while (finalLista)
+			
 			
 			{	this.btnNextPage.click();
-				//driver.navigate().refresh();
+				
 				grillaResultadoMarca = funciones.getWebElementListByXpath("//article[@class='PieceLayout-orsj2a-0 PieceLayout__ResponsiveLayout-orsj2a-3 GKcLt']",driver);
 				for (WebElement valGrilla: grillaResultadoMarca)
 				{	//Obtengo el valor del texto de cada una de las cards de la grilla
@@ -137,9 +127,11 @@ public class PaginaHeladeras extends PaginaPrincipal
 					if (valGrilla.getText().contains(nameMarca))
 					{
 						//True - entonces sumo uno a los valores positivos
-						System.out.println(valGrilla.getText());
 						this.contValoresSi++;
-						System.out.println(contValoresSi);
+						System.out.println("Nro de heladera de la grilla:"+contValoresSi);
+						System.out.println(valGrilla.getText());
+						
+						
 					}
 				}
 				try {
